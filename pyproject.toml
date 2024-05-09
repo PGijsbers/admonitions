@@ -12,3 +12,6 @@ docs=[
 dev=[
   "pytest",
 ]
+
+[project.entry-points."mkdocs.plugins"]
+gtmm-admonitions = "gtmm_admonitions.admonition:AdmonitionConverter"
