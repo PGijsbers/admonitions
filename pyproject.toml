@@ -1,0 +1,14 @@
+[project]
+name="gtm-admonitions"
+version="0.0.1"
+dependencies=[
+  "mkdocs",
+]
+
+[project.optional-dependencies]
+docs=[
+  "mkdocs-material",
+]
+dev=[
+  "pytest",
+]
