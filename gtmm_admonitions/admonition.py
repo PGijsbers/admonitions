@@ -18,7 +18,7 @@ def convert_admonition_header(gh_header: str) -> str:
     admonition_type_match = re.search(GH_ADMONITION_HEADER_PATTERN, gh_header, flags=re.IGNORECASE)
     (admonition_type,) = admonition_type_match.groups()
     mm_admonition_type = ADMONITION_TYPE_MAP.get(admonition_type.lower(), admonition_type)
-    return f"!!! {mm_admonition_type} {mm_admonition_type.title()}\n"
+    return f'!!! {mm_admonition_type} "{admonition_type.title()}"\n'
 
 def convert_admonition_body(gh_body: str) -> str:
     return gh_body.replace("> ", "    ")
@@ -35,10 +35,10 @@ class AdmonitionConverter(BasePlugin):
         self, markdown: str, /, *, page: Page, config: MkDocsConfig, files: Files
     ) -> str | None:
         """"Converts all instances of Github admonition to MM admonitions."""
-        matches = list(GH_ADMONITION_PATTERN.finditer(markdown))
+        matches = list(GH_ADMONITION_PATTERN.finditer(markdown))[:-2]
         # We traverse backwards so that the match indices stay correct
         for match in reversed(matches):
             mm_admonition = convert_admonition(match.group())
             markdown = markdown[:match.start()] + mm_admonition + markdown[match.end():]
-            # breakpoint()
+            breakpoint()
         return markdown
