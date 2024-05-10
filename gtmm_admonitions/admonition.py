@@ -6,6 +6,7 @@ from mkdocs.structure.pages import Page
 
 GH_ADMONITION_HEADER_PATTERN = r"> {,3}\[!(\w+)]\s*"
 GH_ADMONITION_PATTERN = re.compile(r"> {,3}\[!\w+]\s*\n(>.*\n)+", flags=re.IGNORECASE)
+GH_CODEBLOCK_PATTERN = re.compile(r"```.*?```", flags=re.DOTALL)
 
 # TODO: Make this configurable
 ADMONITION_TYPE_MAP = {
@@ -36,9 +37,17 @@ class AdmonitionConverter(BasePlugin):
         self, markdown: str, /, *, page: Page, config: MkDocsConfig, files: Files
     ) -> str | None:
         """"Converts all instances of Github admonition to MM admonitions."""
-        matches = list(GH_ADMONITION_PATTERN.finditer(markdown))
+        admonition_matches = list(GH_ADMONITION_PATTERN.finditer(markdown))
+        codeblock_matches = list(GH_CODEBLOCK_PATTERN.finditer(markdown))
+        admonition_matches = [
+            match for match in admonition_matches
+            if not any(
+                codeblock.start() < match.start() < codeblock.end()
+                for codeblock in codeblock_matches
+            )
+        ]
         # We traverse backwards so that the match indices stay correct
-        for match in reversed(matches):
+        for match in reversed(admonition_matches):
             mm_admonition = convert_admonition(match.group())
             markdown = markdown[:match.start()] + mm_admonition + markdown[match.end():]
         return markdown
