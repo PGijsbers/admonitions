@@ -1,13 +1,14 @@
 # Admonitions
 
-Convert Github admonitions to `mkdocs-material` admonitions when building docs,
-so that you can have admonitions on Github _and_ in the documentation from the
-same file.
+Convert [GitHub admonitions](https://github.com/orgs/community/discussions/16925)
+to [`mkdocs-material` admonitions](https://squidfunk.github.io/mkdocs-material/reference/admonitions/) 
+when building docs, so that you can have admonitions on GitHub _and_ in the 
+documentation from the same file.
 
 > [!TIP]
 > This is an admonition. They are a useful tool to attract attention to information.
 
-# Usage
+## Usage
 
 To install the plugin:
 
@@ -23,11 +24,11 @@ plugins:
 ```
 
 Now you can write Github-compatible admonitions, and they will be 
-automatically converted when used in `mkdocs-material` pages.
+automatically converted when used in [`mkdocs-material`][mm] pages.
 
-## The Problem
+## Why is this needed?
 
-Both Github and `mkdocs-material` support admonitions from their markdown flavors.
+Both Github and [`mkdocs-material`][mm] support admonitions from their markdown flavors.
 Unfortunately, their flavors are different. 
 A Github admonition is written like this:
 
@@ -36,7 +37,7 @@ A Github admonition is written like this:
 > This is the Github admonition syntax.
 ```
 
-And `mkdocs-material` admonitions are written like this:
+And [`mkdocs-material`][mm] admonitions are written like this:
 
 ```
 !!! tip
@@ -44,20 +45,66 @@ And `mkdocs-material` admonitions are written like this:
     This is the mkdocs-materials admonition syntax.
 ```
 
-So now whenever you have markdown documentation that should be readable both
-on Github and from built documentation, using either style means it will show
-up as 
+So an admonition in your documentation will render correctly on either Github
+or in your [`mkdocs-material`][mm] pages, but not both. With this plugin, you write 
+the admonition once in Github syntax, and it will still show correctly in the
+built [`mkdocs-material`][mm] pages!
 
 ## Limitations
 
-The `mkdocs-materials` admonitions are much more powerful. They can feature
-titles. They have more types and you can add custom ones. You can in-line
+The [`mkdocs-material`][mm] admonitions are much more powerful. They can feature
+titles. They have more types, and you can add custom ones. You can render inline
 admonitions. They can be collapsable, and be collapsed by default.
 And much more. 
 
-But since the Github syntax has none of that, this tool can not offer such
-`mkdocs-material` admonitions to be generated. All admonitions will be
+But since the GitHub syntax has none of that, this tool can not offer such
+[`mkdocs-material`][mm] admonitions to be generated. All admonitions will be
 converted to non-collapsed title-less admonitions.
 
+GitHub admonitions feature two types which are not supported by [`mkdocs-material`][mm]:
+`danger` and `important`. In converting these admonitions, we will preserve their title,
+but use the `caution` and `warning` symbol and color, respectively.
 
+## Examples
 
+Here is a gallery with various admonitions.
+They should show up correctly on the built documentation too!
+
+> [!tip]
+> This is normally formatted. Type in lower case. No extra spaces.
+> It contains two lines in markdown, but only a soft linebreak.
+
+>   [!CAUTION]    
+> This admonition has:  
+> 
+>   - ALL CAPS in the type
+>   - a list
+> 
+> Note that this admonition uses the "danger" symbol with "Caution" title.
+
+> [!Important]
+> This contains `inline` and
+> ```python
+> import this  # python code in ticks
+> ```
+>
+>     and code block with spaces
+>
+> Note that this admonition uses the "warning" symbol with "Important" title.
+
+> [!note]
+> And this admonition contains an empty line
+>
+> That only has a `>` character in markdown.
+
+> [!warning]
+> Admonitions may contains quotes
+> > Quotes always contain great wisdom. 
+
+But pay attention! There may be admonitions which are really just code:
+```text
+> [!note]
+> This is not an admonition.
+```
+
+[mm]: https://squidfunk.github.io/mkdocs-material/
