@@ -42,4 +42,4 @@ dev=[
 ]
 
 [project.entry-points."mkdocs.plugins"]
-gh-admonitions = "src.admonitions.admonition:AdmonitionConverter"
+gh-admonitions = "admonitions.admonition:AdmonitionConverter"
