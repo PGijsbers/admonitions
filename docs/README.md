@@ -1,7 +1,7 @@
-# GitHub Admonitions for Mkdocs-Material
+# GitHub Admonitions for MkDocs
 
 Convert [GitHub admonitions](https://github.com/orgs/community/discussions/16925)
-to [`mkdocs-material` admonitions](https://squidfunk.github.io/mkdocs-material/reference/admonitions/) 
+to [`mkdocs` admonitions](https://python-markdown.github.io/extensions/admonition/) 
 when building docs, so that you can have admonitions on GitHub _and_ in the 
 documentation from the same file.
 
@@ -24,11 +24,11 @@ plugins:
 ```
 
 Now you can write Github-compatible admonitions, and they will be 
-automatically converted when used in [`mkdocs-material`][mm] pages.
+automatically converted when used in [`mkdocs`][mm] pages.
 
 ## Why is this needed?
 
-Both Github and [`mkdocs-material`][mm] support admonitions from their markdown flavors.
+Both Github and [`mkdocs`][mm] support admonitions from their markdown flavors.
 Unfortunately, their flavors are different. 
 A Github admonition is written like this:
 
@@ -37,7 +37,7 @@ A Github admonition is written like this:
 > This is the Github admonition syntax.
 ```
 
-And [`mkdocs-material`][mm] admonitions are written like this:
+And [`mkdocs`][mm] admonitions are written like this:
 
 ```
 !!! tip
@@ -46,22 +46,22 @@ And [`mkdocs-material`][mm] admonitions are written like this:
 ```
 
 So an admonition in your documentation will render correctly on either Github
-or in your [`mkdocs-material`][mm] pages, but not both. With this plugin, you write 
+or in your [`mkdocs`][mm] pages, but not both. With this plugin, you write 
 the admonition once in Github syntax, and it will still show correctly in the
-built [`mkdocs-material`][mm] pages!
+built [`mkdocs`][mm] pages!
 
 ## Limitations
 
-The [`mkdocs-material`][mm] admonitions are much more powerful. They can feature
+The [`mkdocs`][mm] admonitions are much more powerful. They can feature
 titles. They have more types, and you can add custom ones. You can render inline
 admonitions. They can be collapsable, and be collapsed by default.
 And much more. 
 
 But since the GitHub syntax has none of that, this tool can not offer such
-[`mkdocs-material`][mm] admonitions to be generated. All admonitions will be
+[`mkdocs`][mm] admonitions to be generated. All admonitions will be
 converted to non-collapsed title-less admonitions.
 
-GitHub admonitions feature two types which are not supported by [`mkdocs-material`][mm]:
+GitHub admonitions feature two types which are not supported by [`mkdocs`][mm]:
 `danger` and `important`. In converting these admonitions, we will preserve their title,
 but use the `caution` and `warning` symbol and color, respectively.
 
@@ -111,4 +111,4 @@ But pay attention! There may be admonitions which are really just code:
 
 This is an independent project and not affiliated with GitHub in any way.
 
-[mm]: https://squidfunk.github.io/mkdocs-material/
+[mm]: https://www.mkdocs.org

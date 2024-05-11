@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name="mkdocs-github-admonitions-plugin"
-description="Convert GitHub admonitions to mkdocs-material syntax when building docs."
+description="Convert GitHub admonitions to mkdocs syntax when building docs."
 readme="docs/README.md"
 keywords=["github", "mkdocs", "material", "admonition"]
 classifiers=[
