@@ -8,4 +8,4 @@ markdown_extensions:
   - pymdownx.superfences
 
 plugins:
-  - "gtmm-admonitions"
+  - "gh-admonitions"

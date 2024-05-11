@@ -1,5 +1,5 @@
 [project]
-name="gtm-admonitions"
+name="mkdocs-github-admonitions-plugin"
 version="0.0.1"
 dependencies=[
   "mkdocs",
@@ -14,4 +14,4 @@ dev=[
 ]
 
 [project.entry-points."mkdocs.plugins"]
-gtmm-admonitions = "gtmm_admonitions.admonition:AdmonitionConverter"
+gh-admonitions = "src.admonition:AdmonitionConverter"

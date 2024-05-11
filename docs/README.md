@@ -1,4 +1,4 @@
-# Admonitions
+# GitHub Admonitions for Mkdocs-Material
 
 Convert [GitHub admonitions](https://github.com/orgs/community/discussions/16925)
 to [`mkdocs-material` admonitions](https://squidfunk.github.io/mkdocs-material/reference/admonitions/) 
@@ -13,7 +13,7 @@ documentation from the same file.
 To install the plugin:
 
 ```bash
-python -m pip install gh-admonitions
+python -m pip install mkdocs-github-admonitions-plugin
 ```
 
 Then in your `mkdocs.yml` file, add the plugin:
@@ -106,5 +106,9 @@ But pay attention! There may be admonitions which are really just code:
 > [!note]
 > This is not an admonition.
 ```
+
+## Disclaimer
+
+This is an independent project and not affiliated with GitHub in any way.
 
 [mm]: https://squidfunk.github.io/mkdocs-material/
