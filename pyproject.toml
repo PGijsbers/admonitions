@@ -1,9 +1,30 @@
 [project]
 name="mkdocs-github-admonitions-plugin"
+description="Convert GitHub admonitions to mkdocs-material syntax when building docs."
+readme="docs/README.md"
+keywords=["github", "mkdocs", "material", "admonition"]
+classifiers=[
+  "Development Status :: 4 - Beta",
+  "Framework :: MkDocs",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Natural Language :: English",
+  "Topic :: Documentation",
+  "Programming Language :: Python :: 3",
+]
+authors=[
+  {"name" = "Pieter Gijsbers"},
+]
 version="0.0.1"
+requires-python=">=3.10"
 dependencies=[
   "mkdocs",
 ]
+
+[project.urls]
+Homepage="https://pgijsbers.github.io/admonitions"
+Repository="https://www.github.com/pgijsbers/admonitions.git"
+Issues="https://www.github.com/pgijsbers/admonitions/issues"
 
 [project.optional-dependencies]
 docs=[
