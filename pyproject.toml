@@ -2,6 +2,9 @@
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
+[tool.hatch.build.targets.wheel]
+packages = ["src/admonitions"]
+
 [project]
 name="mkdocs-github-admonitions-plugin"
 description="Convert GitHub admonitions to mkdocs syntax when building docs."
@@ -39,4 +42,4 @@ dev=[
 ]
 
 [project.entry-points."mkdocs.plugins"]
-gh-admonitions = "src.admonition:AdmonitionConverter"
+gh-admonitions = "src.admonitions.admonition:AdmonitionConverter"
