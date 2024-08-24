@@ -62,8 +62,8 @@ But since the GitHub syntax has none of that, this tool can not offer such
 converted to non-collapsed title-less admonitions.
 
 GitHub admonitions feature two types which are not supported by [`mkdocs`][mm]:
-`danger` and `important`. In converting these admonitions, we will preserve their title,
-but use the `caution` and `warning` symbol and color, respectively.
+`caution` and `important`. In converting these admonitions, we will preserve their title,
+but use the `danger` and `warning` symbol and color, respectively.
 
 ## Examples
 
