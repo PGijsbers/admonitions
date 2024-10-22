@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import re
 from mkdocs.config.defaults import MkDocsConfig
 from mkdocs.plugins import BasePlugin

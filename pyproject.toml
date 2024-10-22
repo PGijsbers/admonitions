@@ -22,8 +22,8 @@ classifiers=[
 authors=[
   {"name" = "Pieter Gijsbers"},
 ]
-version="0.0.2"
-requires-python=">=3.10"
+version="0.0.3"
+requires-python=">=3.8"
 dependencies=[
   "mkdocs",
 ]
