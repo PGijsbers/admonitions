@@ -26,7 +26,7 @@ def convert_admonition_header(gh_header: str) -> str:
 
 def convert_admonition_body(gh_body: str) -> str:
     starts_with_angle = r">(.*?\n)"
-    return re.sub(starts_with_angle, "    \g<1>", gh_body)
+    return re.sub(starts_with_angle, r"    \g<1>", gh_body)
 
 
 def convert_admonition(github_admonition: str) -> str:
