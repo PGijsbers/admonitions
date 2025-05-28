@@ -81,3 +81,51 @@ def test_alert_containing_codeblock_is_converted():
         converted
         == '!!! tip "Tip"\n    Some code expert:\n    ```json\n    {"a": 123}\n    ```\n'
     )
+
+
+def test_gl_overridden_title():
+    # GIVEN
+    converter = AdmonitionConverter()
+    # WHEN
+    converted = converter.on_page_markdown(
+        "> [!tip] Alert titles can be overridden\n> This is a tip admonition with overridden title.\n",
+        page=None,
+        config=None,
+        files=None,
+    )
+    # THEN
+    assert (
+        converted
+        == '!!! tip "Alert titles can be overridden"\n    This is a tip admonition with overridden title.\n'
+    )
+
+
+def test_gl_multiline_alert():
+    # GIVEN
+    converter = AdmonitionConverter()
+    # WHEN
+    converted = converter.on_page_markdown(
+        ">>> [!tip]\nThis is a tip admonition.\n>>>\n",
+        page=None,
+        config=None,
+        files=None,
+    )
+    # THEN
+    assert converted == '!!! tip "Tip"\n    This is a tip admonition.\n\n'
+
+
+def test_gl_complex():
+    # GIVEN
+    converter = AdmonitionConverter()
+    # WHEN
+    converted = converter.on_page_markdown(
+        ">>> [!WARNING] Inception alert\nHere is the alert syntax:\n```markdown\n> [!tip]\n> This is a tip admonition.\n```\n>>>\n",
+        page=None,
+        config=None,
+        files=None,
+    )
+    # THEN
+    assert (
+        converted
+        == '!!! warning "Inception alert"\n    Here is the alert syntax:\n    ```markdown\n    > [!tip]\n    > This is a tip admonition.\n    ```\n\n'
+    )
