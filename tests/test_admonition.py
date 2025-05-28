@@ -10,7 +10,7 @@ def test_gh_tip_alert():
         "> [!tip]\n> This is a tip admonition.\n", page=None, config=None, files=None
     )
     # THEN
-    assert converted == '!!! tip "Tip"\n     This is a tip admonition.\n'
+    assert converted == '!!! tip "Tip"\n    This is a tip admonition.\n'
 
 
 def test_gh_multiline_body():
@@ -26,7 +26,7 @@ def test_gh_multiline_body():
     # THEN
     assert (
         converted
-        == '!!! note "Note"\n     This is a note admonition,\n     that spans over two lines.\n'
+        == '!!! note "Note"\n    This is a note admonition,\n    that spans over two lines.\n'
     )
 
 
@@ -41,7 +41,7 @@ def test_caution_alert_becomes_danger():
         files=None,
     )
     # THEN
-    assert converted == '!!! danger "Caution"\n     This is a caution admonition.\n'
+    assert converted == '!!! danger "Caution"\n    This is a caution admonition.\n'
 
 
 def test_important_alert_becomes_warning():
@@ -56,7 +56,7 @@ def test_important_alert_becomes_warning():
     )
     # THEN
     assert (
-        converted == '!!! warning "Important"\n     This is an important admonition.\n'
+        converted == '!!! warning "Important"\n    This is an important admonition.\n'
     )
 
 
@@ -79,5 +79,5 @@ def test_alert_containing_codeblock_is_converted():
     # THEN
     assert (
         converted
-        == '!!! tip "Tip"\n     Some code expert:\n     ```json\n     {"a": 123}\n     ```\n'
+        == '!!! tip "Tip"\n    Some code expert:\n    ```json\n    {"a": 123}\n    ```\n'
     )
