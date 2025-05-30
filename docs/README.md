@@ -5,6 +5,8 @@ to [`mkdocs` admonitions](https://python-markdown.github.io/extensions/admonitio
 when building docs, so that you can have admonitions on GitHub _and_ in the 
 documentation from the same file.
 
+Now also supporting GitLab admonitions ([alerts](https://docs.gitlab.com/user/markdown/#alerts), thanks @pismy!).
+
 > [!TIP]
 > This is an admonition. They are a useful tool to attract attention to information.
 
@@ -23,18 +25,18 @@ plugins:
   - gh-admonitions
 ```
 
-Now you can write Github-compatible admonitions, and they will be 
+Now you can write GitHub-compatible admonitions, and they will be 
 automatically converted when used in [`mkdocs`][mm] pages.
 
 ## Why is this needed?
 
-Both Github and [`mkdocs`][mm] support admonitions from their markdown flavors.
+Both GitHub and [`mkdocs`][mm] support admonitions from their markdown flavors.
 Unfortunately, their flavors are different. 
-A Github admonition is written like this:
+A GitHub admonition is written like this:
 
 ```
 > [!TIP]
-> This is the Github admonition syntax.
+> This is the GitHub admonition syntax.
 ```
 
 And [`mkdocs`][mm] admonitions are written like this:
@@ -45,9 +47,9 @@ And [`mkdocs`][mm] admonitions are written like this:
     This is the mkdocs-materials admonition syntax.
 ```
 
-So an admonition in your documentation will render correctly on either Github
+So an admonition in your documentation will render correctly on either GitHub
 or in your [`mkdocs`][mm] pages, but not both. With this plugin, you write 
-the admonition once in Github syntax, and it will still show correctly in the
+the admonition once in GitHub syntax, and it will still show correctly in the
 built [`mkdocs`][mm] pages!
 
 ## Limitations
