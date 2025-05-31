@@ -48,7 +48,7 @@ GH_CODEBLOCK_PATTERN = re.compile(
     flags=re.MULTILINE | re.DOTALL,
 )
 ALERT_BASIC_PATTERN = re.compile(
-    r"^> {,3}\[!(?P<type>note|tip|important|caution|warning)] *(?P<title>.*)\r?\n(?P<body>(?:> +.*\r?\n)+)",
+    r"^> {,3}\[!(?P<type>note|tip|important|caution|warning)] *(?P<title>.*)\r?\n(?P<body>(?:>.*\r?\n)+)",
     flags=re.IGNORECASE | re.MULTILINE,
 )
 """
@@ -58,7 +58,7 @@ Basic alert syntax pattern with capturing groups:
 - `body`: Alert body (GitHub & GitLab)
 """
 
-ALERT_BASIC_BODY_PREFIX = re.compile("^> ", re.MULTILINE)
+ALERT_BASIC_BODY_PREFIX = re.compile("^> ?", re.MULTILINE)
 
 ALERT_MULTILINE_PATTERN = re.compile(
     r"^>>> {,3}\[!(?P<type>note|tip|important|caution|warning)] *(?P<title>.*)\r?\n(?P<body>(?:.*\r?\n)+)>>>",
