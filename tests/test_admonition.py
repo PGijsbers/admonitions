@@ -83,6 +83,40 @@ def test_alert_containing_codeblock_is_converted():
     )
 
 
+def test_alert_surrounded_by_codeblocks_is_converted():
+    # GIVEN
+    converter = AdmonitionConverter()
+    # WHEN
+    converted = converter.on_page_markdown(
+        "```text\ncode block\nbefore\n```\n\n> [!tip]\n> This is the alert.\n\n```\ncode block\nafter\n```\n",
+        page=None,
+        config=None,
+        files=None,
+    )
+    # THEN
+    assert (
+        converted
+        == '```text\ncode block\nbefore\n```\n\n!!! tip "Tip"\n    This is the alert.\n\n```\ncode block\nafter\n```\n'
+    )
+
+
+def test_alert_with_blank_lines():
+    # GIVEN
+    converter = AdmonitionConverter()
+    # WHEN
+    converted = converter.on_page_markdown(
+        "> [!note]\n> This is the first chapter.\n>\n> This is the second chapter.\n",
+        page=None,
+        config=None,
+        files=None,
+    )
+    # THEN
+    assert (
+        converted
+        == '!!! note "Note"\n    This is the first chapter.\n    \n    This is the second chapter.\n'
+    )
+
+
 def test_gl_overridden_title():
     # GIVEN
     converter = AdmonitionConverter()
