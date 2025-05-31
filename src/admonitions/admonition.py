@@ -44,7 +44,7 @@ from mkdocs.structure.files import Files
 from mkdocs.structure.pages import Page
 
 GH_CODEBLOCK_PATTERN = re.compile(
-    r"^```.*^```",
+    r"^```.*?^```",
     flags=re.MULTILINE | re.DOTALL,
 )
 ALERT_BASIC_PATTERN = re.compile(
