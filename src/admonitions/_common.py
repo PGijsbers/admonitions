@@ -36,8 +36,8 @@ def convert_alerts(markdown: str, *flavors: AdmonitionFlavor) -> str:
     is converted and the search resumes after its end. So the body of an alert
     is never converted by another flavor, even when it contains a line that
     looks like the start of an alert. This matches GitHub and GitLab, which
-    support neither nested nor consecutive alerts, and render a later alert
-    marker in an alert's body as plain text.
+    render an alert marker inside a quoted alert's body as plain text, so
+    consecutive alerts in the same quote become a single alert.
 
     Example, with a titled alert whose body contains a GitHub alert marker:
     ```
