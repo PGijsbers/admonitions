@@ -38,3 +38,4 @@ class GitHubAlert(AdmonitionFlavor):
         flags=re.IGNORECASE | re.MULTILINE | re.VERBOSE,
     )
     quoted = True
+    allows_nesting = False

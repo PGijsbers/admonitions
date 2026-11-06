@@ -21,8 +21,6 @@ class AdmonitionConverter(BasePlugin):
         self, markdown: str, /, *, page: Page, config: MkDocsConfig, files: Files
     ) -> str | None:
         """Converts all GitHub/GitLab alerts to MkDocs Material admonitions."""
-        # convert basic syntax, with or without a title (GitLab only), in one pass
-        markdown = convert_alerts(markdown, GitHubAlert(), GitLabTitledAlert())
-
-        # convert multiline blockquote syntax (GitLab only)
-        return convert_alerts(markdown, GitLabMultilineAlert())
+        return convert_alerts(
+            markdown, GitHubAlert(), GitLabTitledAlert(), GitLabMultilineAlert()
+        )

@@ -34,10 +34,10 @@ def convert_alerts(markdown: str, *flavors: AdmonitionFlavor) -> str:
     The flavors are applied in a single left-to-right pass, as if their
     patterns were one pattern. At each step, the leftmost match of any flavor
     is converted and the search resumes after its end. So the body of an alert
-    is never converted by another flavor, even when it contains a line that
-    looks like the start of an alert. This matches GitHub and GitLab, which
-    render an alert marker inside a quoted alert's body as plain text, so
-    consecutive alerts in the same quote become a single alert.
+    is left as it is, even when it contains a line that looks like the start of
+    an alert, unless the alert's flavor `allows_nesting`. This matches GitHub
+    and GitLab, which render an alert marker inside a quoted alert's body as
+    plain text, so consecutive alerts in the same quote become a single alert.
 
     Example, with a titled alert whose body contains a GitHub alert marker:
     ```
@@ -63,6 +63,13 @@ def convert_alerts(markdown: str, *flavors: AdmonitionFlavor) -> str:
 
     Swapping the order breaks the reverse case, a GitHub alert whose body
     contains a titled alert marker.
+
+    If the alert's flavor `allows_nesting`, its body is converted first, with
+    all the flavors, so alerts inside it become nested admonitions. GitLab
+    renders alerts inside multiline (`>>>`) alerts this way.
+
+    The order of the `flavors` doesn't matter. When two flavors match at the
+    same position, the longest match wins.
     """
     codeblocks = list(CODEBLOCK_PATTERN.finditer(markdown))
 
@@ -76,6 +83,8 @@ def convert_alerts(markdown: str, *flavors: AdmonitionFlavor) -> str:
         alert_type: str = alert.group("type")
         alert_title: str = (alert.groupdict().get("title") or "").strip()
         alert_body: str = alert.group("body")
+        if flavor.allows_nesting:
+            alert_body = convert_alerts(alert_body, *flavors)
 
         admonition_type = ADMONITION_TYPE_MAP.get(
             alert_type.lower(), alert_type.lower()
@@ -96,8 +105,12 @@ def convert_alerts(markdown: str, *flavors: AdmonitionFlavor) -> str:
         candidates = [(match, flavor) for match, flavor in candidates if match]
         if not candidates:
             break
-        # the leftmost alert wins, as it would with a single combined pattern
-        alert, flavor = min(candidates, key=lambda candidate: candidate[0].start())
+        # the leftmost alert wins, as it would with a single combined pattern,
+        # then the longest one, so the order of the flavors doesn't matter
+        alert, flavor = min(
+            candidates,
+            key=lambda candidate: (candidate[0].start(), -candidate[0].end()),
+        )
         converted.append(markdown[position : alert.start()])
         if in_codeblock(alert):
             converted.append(alert.group())

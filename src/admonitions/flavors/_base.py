@@ -13,3 +13,6 @@ class AdmonitionFlavor:
 
     quoted: bool
     """Whether every body line starts with a `>` to remove."""
+
+    allows_nesting: bool
+    """Whether the body may contain other alerts, converted as nested admonitions."""

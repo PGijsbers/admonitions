@@ -49,3 +49,17 @@ def test_consecutive_alerts_are_converted_as_one():
         converted
         == '!!! tip "Tip"\n    This is the first body.\n    [!note]\n    This is the second admonition.\n'
     )
+
+
+def test_gh_alert_in_gl_multiline_alert_is_nested():
+    # GIVEN
+    converter = AdmonitionConverter()
+    # WHEN
+    converted = converter.on_page_markdown(
+        ">>> [!note]\n> [!tip]\n> Inner tip.\n>>>\n",
+        page=None,
+        config=None,
+        files=None,
+    )
+    # THEN
+    assert converted == '!!! note "Note"\n    !!! tip "Tip"\n        Inner tip.\n\n'

@@ -72,16 +72,6 @@ Due to its nature of "bridge" between different flavors of admonitions, this plu
 
 - The [`mkdocs`][mm] admonitions are much more powerful (more types, inline, collapsible, ...). Since the GitHub and GitLab syntaxes have none of that, all admonitions are converted to non-collapsed admonitions, titled with their type or with the custom title allowed by the GitLab syntax.
 - GitHub's `caution` and `important` types are not supported by [`mkdocs`][mm]. They keep their title, but use the `danger` and `warning` symbol and color, respectively.
-- Nested admonitions are not supported. GitHub does not allow them, but GitLab renders an alert inside a multiline (`>>>`) alert as a nested admonition:
-
-    ```markdown
-    >>> [!note]
-    > [!tip]
-    > Inner tip.
-    >>>
-    ```
-
-    The inner alert swallows the closing `>>>`, so the outer alert is left unconverted. Avoid placing alerts inside multiline alerts.
 
 ## Examples
 

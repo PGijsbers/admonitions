@@ -45,6 +45,7 @@ class GitLabTitledAlert(AdmonitionFlavor):
         flags=re.IGNORECASE | re.MULTILINE | re.VERBOSE,
     )
     quoted = True
+    allows_nesting = False
 
 
 class GitLabMultilineAlert(AdmonitionFlavor):
@@ -67,3 +68,4 @@ class GitLabMultilineAlert(AdmonitionFlavor):
         flags=re.IGNORECASE | re.MULTILINE | re.VERBOSE,
     )
     quoted = False
+    allows_nesting = True
