@@ -1,6 +1,6 @@
 """GitLab 'alerts' syntax.
 
-GitLab embraces GitHub syntax (see `admonitions.flavours.github`) with some
+GitLab embraces GitHub syntax (see `admonitions.flavors.github`) with some
 minor additions.
 
 See: https://docs.gitlab.com/user/markdown/#alerts

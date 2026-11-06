@@ -1,6 +1,6 @@
 from admonitions._common import convert_alerts
 from admonitions.admonition import AdmonitionConverter
-from admonitions.flavours import github
+from admonitions.flavors import github
 
 
 def test_tip_alert():

@@ -1,6 +1,6 @@
 from admonitions._common import convert_alerts
 from admonitions.admonition import AdmonitionConverter
-from admonitions.flavours import gitlab
+from admonitions.flavors import gitlab
 
 
 def test_overridden_title():

@@ -1,7 +1,7 @@
 """Converts GitHub/GitLab 'alerts' to MkDocs Material admonitions.
 
-The supported syntaxes are documented in `admonitions.flavours.github` and
-`admonitions.flavours.gitlab`.
+The supported syntaxes are documented in `admonitions.flavors.github` and
+`admonitions.flavors.gitlab`.
 """
 
 from __future__ import annotations
@@ -12,7 +12,7 @@ from mkdocs.structure.files import Files
 from mkdocs.structure.pages import Page
 
 from admonitions._common import convert_alerts
-from admonitions.flavours import github, gitlab
+from admonitions.flavors import github, gitlab
 
 
 class AdmonitionConverter(BasePlugin):
