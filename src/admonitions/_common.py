@@ -3,12 +3,8 @@
 from __future__ import annotations
 
 import re
-from typing import Tuple
 
-GH_CODEBLOCK_PATTERN = re.compile(
-    r"^```.*?^```",
-    flags=re.MULTILINE | re.DOTALL,
-)
+CODEBLOCK_PATTERN = re.compile(r"^```.*?^```", flags=re.MULTILINE | re.DOTALL)
 
 # TODO: Make this configurable
 ADMONITION_TYPE_MAP = {
@@ -16,38 +12,30 @@ ADMONITION_TYPE_MAP = {
     "important": "warning",
 }
 
-AlertRule = Tuple[re.Pattern, re.Pattern]
-"""
-An `(alert_pattern, body_prefix)` pair:
-- `alert_pattern` has a `type` and a `body` capturing group, and optionally a
-  `title` group.
-- `body_prefix` matches the per-line prefix to replace with indentation.
-"""
 
+def convert_alerts(markdown: str, *patterns: re.Pattern, quoted: bool = True) -> str:
+    """Converts all alerts matching any of the `patterns` to MM admonitions.
 
-def convert_alerts(markdown: str, *rules: AlertRule) -> str:
-    """Converts all alerts matching any of the `rules` to MM admonitions.
+    Each pattern captures the alert's `type` and `body`, and optionally its
+    `title`. If `quoted`, every body line starts with a `>` to remove.
 
-    The rules are applied in a single left-to-right pass, as if they were one
-    pattern, so the body of an alert is never converted by another rule.
+    The patterns are applied in a single left-to-right pass, as if they were one
+    pattern, so the body of an alert is never converted by another pattern.
     Alerts within code blocks are left untouched.
     """
-    codeblock_matches = list(GH_CODEBLOCK_PATTERN.finditer(markdown))
+    codeblocks = list(CODEBLOCK_PATTERN.finditer(markdown))
+    body_prefix = re.compile("^> ?" if quoted else "^", re.MULTILINE)
 
-    def in_codeblock(admonition: re.Match) -> bool:
+    def in_codeblock(alert: re.Match) -> bool:
         return any(
-            codeblock.start() < admonition.start()
-            and admonition.end() < codeblock.end()
-            for codeblock in codeblock_matches
+            codeblock.start() < alert.start() and alert.end() < codeblock.end()
+            for codeblock in codeblocks
         )
 
-    def convert_admonition(match: re.Match, body_prefix: re.Pattern) -> str:
-        if in_codeblock(match):
-            # don't convert
-            return match.group()
-        alert_type: str = match.group("type")
-        alert_title: str = (match.groupdict().get("title") or "").strip()
-        alert_body: str = match.group("body")
+    def to_admonition(alert: re.Match) -> str:
+        alert_type: str = alert.group("type")
+        alert_title: str = (alert.groupdict().get("title") or "").strip()
+        alert_body: str = alert.group("body")
 
         admonition_type = ADMONITION_TYPE_MAP.get(
             alert_type.lower(), alert_type.lower()
@@ -56,19 +44,17 @@ def convert_alerts(markdown: str, *rules: AlertRule) -> str:
         admonition_body = body_prefix.sub("    ", alert_body.strip())
         return f'!!! {admonition_type} "{admonition_title}"\n{admonition_body}\n'
 
-    converted: list[str] = []
+    converted = []
     position = 0
     while True:
-        candidates = [
-            (match, body_prefix)
-            for alert_pattern, body_prefix in rules
-            if (match := alert_pattern.search(markdown, position))
-        ]
-        if not candidates:
+        matches = [pattern.search(markdown, position) for pattern in patterns]
+        matches = [match for match in matches if match]
+        if not matches:
             break
-        match, body_prefix = min(candidates, key=lambda candidate: candidate[0].start())
-        converted.append(markdown[position : match.start()])
-        converted.append(convert_admonition(match, body_prefix))
-        position = match.end()
+        # the leftmost alert wins, as it would with a single combined pattern
+        alert = min(matches, key=lambda match: match.start())
+        converted.append(markdown[position : alert.start()])
+        converted.append(alert.group() if in_codeblock(alert) else to_admonition(alert))
+        position = alert.end()
     converted.append(markdown[position:])
     return "".join(converted)

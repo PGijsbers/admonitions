@@ -26,34 +26,29 @@ from __future__ import annotations
 
 import re
 
-from ._common import AlertRule, convert_alerts
-from .github import ALERT_BODY_PREFIX
+from ._common import convert_alerts
 
-ALERT_TITLE_PATTERN = re.compile(
-    r"^> {,3}\[!(?P<type>note|tip|important|caution|warning)] *(?P<title>.*\S.*)\r?\n(?P<body>(?:>.*(?:\r?\n|\Z))+)",
-    flags=re.IGNORECASE | re.MULTILINE,
+TITLED_ALERT_PATTERN = re.compile(
+    r"""
+    ^>\ {,3}\[!(?P<type>note|tip|important|caution|warning)]  # > [!type]
+    \ *(?P<title>.*\S.*)\r?\n                                 # followed by a title
+    (?P<body>(?:>.*(?:\r?\n|\Z))+)                            # > body lines
+    """,
+    flags=re.IGNORECASE | re.MULTILINE | re.VERBOSE,
 )
-"""
-Overridden title alert syntax pattern with capturing groups:
-- `type`: Alert type
-- `title`: Overridden title
-- `body`: Alert body
-"""
 
-ALERT_TITLE_RULE: AlertRule = (ALERT_TITLE_PATTERN, ALERT_BODY_PREFIX)
-
-ALERT_MULTILINE_PATTERN = re.compile(
-    r"^>>> {,3}\[!(?P<type>note|tip|important|caution|warning)] *(?P<title>.*)\r?\n(?P<body>(?:.*\r?\n)+)>>>",
-    flags=re.IGNORECASE | re.MULTILINE,
+MULTILINE_ALERT_PATTERN = re.compile(
+    r"""
+    ^>>>\ {,3}\[!(?P<type>note|tip|important|caution|warning)]  # >>> [!type]
+    \ *(?P<title>.*)\r?\n                                       # optional title
+    (?P<body>(?:.*\r?\n)+)                                      # body lines
+    >>>                                                         # closing >>>
+    """,
+    flags=re.IGNORECASE | re.MULTILINE | re.VERBOSE,
 )
-"""Multiline blockquotes alert syntax pattern."""
-
-ALERT_MULTILINE_BODY_PREFIX = re.compile("^", re.MULTILINE)
-
-ALERT_MULTILINE_RULE: AlertRule = (ALERT_MULTILINE_PATTERN, ALERT_MULTILINE_BODY_PREFIX)
 
 
 def convert(markdown: str) -> str:
     """Converts all GitLab-only alerts to MM admonitions."""
-    markdown = convert_alerts(markdown, ALERT_TITLE_RULE)
-    return convert_alerts(markdown, ALERT_MULTILINE_RULE)
+    markdown = convert_alerts(markdown, TITLED_ALERT_PATTERN)
+    return convert_alerts(markdown, MULTILINE_ALERT_PATTERN, quoted=False)

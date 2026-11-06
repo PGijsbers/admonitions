@@ -19,23 +19,18 @@ from __future__ import annotations
 
 import re
 
-from ._common import AlertRule, convert_alerts
+from ._common import convert_alerts
 
 ALERT_PATTERN = re.compile(
-    r"^> {,3}\[!(?P<type>note|tip|important|caution|warning)][^\S\n]*\r?\n(?P<body>(?:>.*(?:\r?\n|\Z))+)",
-    flags=re.IGNORECASE | re.MULTILINE,
+    r"""
+    ^>\ {,3}\[!(?P<type>note|tip|important|caution|warning)]  # > [!type]
+    [^\S\n]*\r?\n                                             # and nothing else
+    (?P<body>(?:>.*(?:\r?\n|\Z))+)                            # > body lines
+    """,
+    flags=re.IGNORECASE | re.MULTILINE | re.VERBOSE,
 )
-"""
-Alert syntax pattern with capturing groups:
-- `type`: Alert type
-- `body`: Alert body
-"""
-
-ALERT_BODY_PREFIX = re.compile("^> ?", re.MULTILINE)
-
-ALERT_RULE: AlertRule = (ALERT_PATTERN, ALERT_BODY_PREFIX)
 
 
 def convert(markdown: str) -> str:
     """Converts all GitHub alerts to MM admonitions."""
-    return convert_alerts(markdown, ALERT_RULE)
+    return convert_alerts(markdown, ALERT_PATTERN)
