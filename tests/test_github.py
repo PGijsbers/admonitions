@@ -3,7 +3,7 @@ from admonitions.admonition import AdmonitionConverter
 from admonitions.flavours import github
 
 
-def test_gh_tip_alert():
+def test_tip_alert():
     # GIVEN
     converter = AdmonitionConverter()
     # WHEN
@@ -14,7 +14,7 @@ def test_gh_tip_alert():
     assert converted == '!!! tip "Tip"\n    This is a tip admonition.\n'
 
 
-def test_gh_multiline_body():
+def test_multiline_body():
     # GIVEN
     converter = AdmonitionConverter()
     # WHEN
@@ -92,7 +92,7 @@ def test_alert_followed_by_empty_line():
     assert converted == '!!! warning "Warning"\n    This is a warning admonition.\n\n'
 
 
-def test_gh_pattern_ignores_overridden_title():
+def test_pattern_ignores_overridden_title():
     # GIVEN
     original = "> [!tip] Alert titles can be overridden\n> This is a tip admonition.\n"
     # WHEN

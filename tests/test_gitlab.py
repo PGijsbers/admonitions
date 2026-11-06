@@ -3,7 +3,7 @@ from admonitions.admonition import AdmonitionConverter
 from admonitions.flavours import gitlab
 
 
-def test_gl_overridden_title():
+def test_overridden_title():
     # GIVEN
     converter = AdmonitionConverter()
     # WHEN
@@ -20,7 +20,7 @@ def test_gl_overridden_title():
     )
 
 
-def test_gl_multiline_alert():
+def test_multiline_blockquote_alert():
     # GIVEN
     converter = AdmonitionConverter()
     # WHEN
@@ -34,7 +34,7 @@ def test_gl_multiline_alert():
     assert converted == '!!! tip "Tip"\n    This is a tip admonition.\n\n'
 
 
-def test_gl_complex():
+def test_multiline_alert_with_title_and_codeblock():
     # GIVEN
     converter = AdmonitionConverter()
     # WHEN
@@ -51,7 +51,7 @@ def test_gl_complex():
     )
 
 
-def test_gl_title_pattern_ignores_gh_alert():
+def test_title_pattern_ignores_gh_alert():
     # GIVEN
     original = "> [!tip]\n> This is a tip admonition.\n"
     # WHEN
