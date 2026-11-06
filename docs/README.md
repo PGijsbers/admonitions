@@ -1,6 +1,6 @@
 # GitHub Admonitions for MkDocs
 
-Convert [GitHub admonitions](https://github.com/orgs/community/discussions/16925)
+Convert [GitHub admonitions](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts)
 to [`mkdocs` admonitions](https://python-markdown.github.io/extensions/admonition/)
 when building docs, so that you can have admonitions on GitHub _and_ in the
 documentation from the same file.
@@ -11,6 +11,20 @@ Now also supporting GitLab admonitions ([alerts](https://docs.gitlab.com/user/ma
 > This is an admonition. They are a useful tool to attract attention to information.
 
 ## Usage
+
+### Prerequisites
+
+This plugin assumes the [`admonition`](https://python-markdown.github.io/extensions/admonition/)
+Markdown extension is already enabled in your `mkdocs.yml`:
+
+```yaml
+markdown_extensions:
+  - admonition
+```
+
+If your alerts contain fenced code blocks, also enable `pymdownx.superfences`.
+
+### Installation
 
 To install the plugin:
 
@@ -56,7 +70,7 @@ built [`mkdocs`][mm] pages!
 
 Due to its nature of "bridge" between different flavors of admonitions, this plugin comes with the following known trade-offs and limitations:
 
-- The [`mkdocs`][mm] admonitions are much more powerful (titles, more types, inline, collapsible, ...). Since the GitHub syntax has none of that, all admonitions are converted to non-collapsed title-less admonitions.
+- The [`mkdocs`][mm] admonitions are much more powerful (more types, inline, collapsible, ...). Since the GitHub and GitLab syntaxes have none of that, all admonitions are converted to non-collapsed admonitions, titled with their type or with the custom title allowed by the GitLab syntax.
 - GitHub's `caution` and `important` types are not supported by [`mkdocs`][mm]. They keep their title, but use the `danger` and `warning` symbol and color, respectively.
 - Nested admonitions are not supported. GitHub does not allow them, but GitLab renders an alert inside a multiline (`>>>`) alert as a nested admonition:
 
@@ -115,6 +129,6 @@ But pay attention! There may be admonitions which are really just code:
 
 ## Disclaimer
 
-This is an independent project and not affiliated with GitHub in any way.
+This is an independent project and not affiliated with GitHub or GitLab in any way.
 
 [mm]: https://www.mkdocs.org
