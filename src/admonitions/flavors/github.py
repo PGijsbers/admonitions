@@ -17,18 +17,24 @@ from __future__ import annotations
 
 import re
 
-ALERT_PATTERN = re.compile(
-    r"""
-    ^>\ {,3}\[!(?P<type>note|tip|important|caution|warning)]  # > [!type]
-    [^\S\n]*\r?\n                                             # and nothing else
-    (?P<body>(?:>.*(?:\r?\n|\Z))+)                            # > body lines
-    """,
-    flags=re.IGNORECASE | re.MULTILINE | re.VERBOSE,
-)
-"""
-Example:
-```
-> [!NOTE]
-> This is a note admonition.
-```
-"""
+from admonitions.flavors._base import AdmonitionFlavor
+
+
+class GitHubAlert(AdmonitionFlavor):
+    """
+    Example:
+    ```
+    > [!NOTE]
+    > This is a note admonition.
+    ```
+    """
+
+    pattern = re.compile(
+        r"""
+        ^>\ {,3}\[!(?P<type>note|tip|important|caution|warning)]  # > [!type]
+        [^\S\n]*\r?\n                                             # and nothing else
+        (?P<body>(?:>.*(?:\r?\n|\Z))+)                            # > body lines
+        """,
+        flags=re.IGNORECASE | re.MULTILINE | re.VERBOSE,
+    )
+    quoted = True

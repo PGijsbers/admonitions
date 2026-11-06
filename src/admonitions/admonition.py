@@ -12,7 +12,8 @@ from mkdocs.structure.files import Files
 from mkdocs.structure.pages import Page
 
 from admonitions._common import convert_alerts
-from admonitions.flavors import github, gitlab
+from admonitions.flavors.github import GitHubAlert
+from admonitions.flavors.gitlab import GitLabMultilineAlert, GitLabTitledAlert
 
 
 class AdmonitionConverter(BasePlugin):
@@ -21,9 +22,7 @@ class AdmonitionConverter(BasePlugin):
     ) -> str | None:
         """Converts all GitHub/GitLab alerts to MkDocs Material admonitions."""
         # convert basic syntax, with or without a title (GitLab only), in one pass
-        markdown = convert_alerts(
-            markdown, github.ALERT_PATTERN, gitlab.TITLED_ALERT_PATTERN
-        )
+        markdown = convert_alerts(markdown, GitHubAlert(), GitLabTitledAlert())
 
         # convert multiline blockquote syntax (GitLab only)
-        return convert_alerts(markdown, gitlab.MULTILINE_ALERT_PATTERN, quoted=False)
+        return convert_alerts(markdown, GitLabMultilineAlert())

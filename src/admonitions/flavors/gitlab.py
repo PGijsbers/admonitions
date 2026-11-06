@@ -24,36 +24,46 @@ from __future__ import annotations
 
 import re
 
-TITLED_ALERT_PATTERN = re.compile(
-    r"""
-    ^>\ {,3}\[!(?P<type>note|tip|important|caution|warning)]  # > [!type]
-    \ *(?P<title>.*\S.*)\r?\n                                 # followed by a title
-    (?P<body>(?:>.*(?:\r?\n|\Z))+)                            # > body lines
-    """,
-    flags=re.IGNORECASE | re.MULTILINE | re.VERBOSE,
-)
-"""
-Example:
-```
-> [!caution] Overridden title
-> This is a caution admonition with overridden title.
-```
-"""
+from admonitions.flavors._base import AdmonitionFlavor
 
-MULTILINE_ALERT_PATTERN = re.compile(
-    r"""
-    ^>>>\ {,3}\[!(?P<type>note|tip|important|caution|warning)]  # >>> [!type]
-    \ *(?P<title>.*)\r?\n                                       # optional title
-    (?P<body>(?:.*\r?\n)+)                                      # body lines
-    >>>                                                         # closing >>>
-    """,
-    flags=re.IGNORECASE | re.MULTILINE | re.VERBOSE,
-)
-"""
-Example:
-```
->>> [!tip]
-This is a tip admonition.
->>>
-```
-"""
+
+class GitLabTitledAlert(AdmonitionFlavor):
+    """
+    Example:
+    ```
+    > [!caution] Overridden title
+    > This is a caution admonition with overridden title.
+    ```
+    """
+
+    pattern = re.compile(
+        r"""
+        ^>\ {,3}\[!(?P<type>note|tip|important|caution|warning)]  # > [!type]
+        \ *(?P<title>.*\S.*)\r?\n                                 # followed by a title
+        (?P<body>(?:>.*(?:\r?\n|\Z))+)                            # > body lines
+        """,
+        flags=re.IGNORECASE | re.MULTILINE | re.VERBOSE,
+    )
+    quoted = True
+
+
+class GitLabMultilineAlert(AdmonitionFlavor):
+    """
+    Example:
+    ```
+    >>> [!tip]
+    This is a tip admonition.
+    >>>
+    ```
+    """
+
+    pattern = re.compile(
+        r"""
+        ^>>>\ {,3}\[!(?P<type>note|tip|important|caution|warning)]  # >>> [!type]
+        \ *(?P<title>.*)\r?\n                                       # optional title
+        (?P<body>(?:.*\r?\n)+)                                      # body lines
+        >>>                                                         # closing >>>
+        """,
+        flags=re.IGNORECASE | re.MULTILINE | re.VERBOSE,
+    )
+    quoted = False

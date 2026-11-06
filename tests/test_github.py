@@ -1,6 +1,6 @@
 from admonitions._common import convert_alerts
 from admonitions.admonition import AdmonitionConverter
-from admonitions.flavors import github
+from admonitions.flavors.github import GitHubAlert
 
 
 def test_tip_alert():
@@ -96,6 +96,6 @@ def test_pattern_ignores_overridden_title():
     # GIVEN
     original = "> [!tip] Alert titles can be overridden\n> This is a tip admonition.\n"
     # WHEN
-    converted = convert_alerts(original, github.ALERT_PATTERN)
+    converted = convert_alerts(original, GitHubAlert())
     # THEN
     assert converted == original

@@ -1,6 +1,6 @@
 from admonitions._common import convert_alerts
 from admonitions.admonition import AdmonitionConverter
-from admonitions.flavors import gitlab
+from admonitions.flavors.gitlab import GitLabTitledAlert
 
 
 def test_overridden_title():
@@ -55,6 +55,6 @@ def test_title_pattern_ignores_gh_alert():
     # GIVEN
     original = "> [!tip]\n> This is a tip admonition.\n"
     # WHEN
-    converted = convert_alerts(original, gitlab.TITLED_ALERT_PATTERN)
+    converted = convert_alerts(original, GitLabTitledAlert())
     # THEN
     assert converted == original
