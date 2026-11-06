@@ -36,6 +36,10 @@ TITLED_ALERT_PATTERN = re.compile(
     """,
     flags=re.IGNORECASE | re.MULTILINE | re.VERBOSE,
 )
+"""
+> [!caution] Overridden title
+> This is a caution admonition with overridden title.
+"""
 
 MULTILINE_ALERT_PATTERN = re.compile(
     r"""
@@ -46,6 +50,11 @@ MULTILINE_ALERT_PATTERN = re.compile(
     """,
     flags=re.IGNORECASE | re.MULTILINE | re.VERBOSE,
 )
+"""
+>>> [!tip]
+This is a tip admonition.
+>>>
+"""
 
 
 def convert(markdown: str) -> str:
