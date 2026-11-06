@@ -74,6 +74,11 @@ def convert_alerts(markdown: str, *flavors: AdmonitionFlavor) -> str:
     codeblocks = list(CODEBLOCK_PATTERN.finditer(markdown))
 
     def in_codeblock(alert: re.Match) -> bool:
+        """Check whether the found alert match lies entirely inside a code block.
+
+        Only the fenced code blocks of the `markdown` being converted count, so
+        alerts shown as examples in code blocks are left as they are.
+        """
         return any(
             codeblock.start() < alert.start() and alert.end() < codeblock.end()
             for codeblock in codeblocks
@@ -128,5 +133,7 @@ def convert_alerts(markdown: str, *flavors: AdmonitionFlavor) -> str:
             converted.append(to_admonition(alert, flavor))
         position = alert.end()
 
+    # Add the rest of the string
     converted.append(markdown[position:])
+
     return "".join(converted)
