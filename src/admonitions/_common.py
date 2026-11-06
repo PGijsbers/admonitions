@@ -26,8 +26,8 @@ def convert_alerts(markdown: str, *flavors: AdmonitionFlavor) -> str:
     """Converts alerts of any of the `flavors` to MkDocs Material admonitions.
 
     Each flavor's `pattern` captures the alert's `type` and `body`, and
-    optionally its `title`. If the flavor is `quoted`, every body line starts
-    with a `>` to remove.
+    optionally its `title`. The flavor's `body_prefix`, if any, is removed from
+    every body line.
 
     Alerts within code blocks are left untouched.
 
@@ -82,14 +82,16 @@ def convert_alerts(markdown: str, *flavors: AdmonitionFlavor) -> str:
     def to_admonition(alert: re.Match, flavor: AdmonitionFlavor) -> str:
         """Convert the found alert match into a MkDocs admonition."""
         alert_type: str = alert.group("type")
+        alert_body: str = alert.group("body").rstrip()
+
+        # Use the custom title where supported, defaulting to the alert type
         alert_title: str = (
             alert.groupdict().get("title") or ""
         ).strip() or alert_type.title()
-        alert_body: str = alert.group("body").rstrip()
 
-        # Remove the quote markers first, so that nested alerts start a line.
-        if flavor.quoted:
-            alert_body = re.sub("^> ?", "", alert_body, flags=re.MULTILINE)
+        # Remove the body prefix first, so that nested alerts start a line.
+        if flavor.body_prefix is not None:
+            alert_body = flavor.body_prefix.sub("", alert_body)
 
         # If the current admonition supports nesting, convert its body first.
         if flavor.allows_nesting:

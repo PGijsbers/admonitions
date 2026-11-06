@@ -37,5 +37,5 @@ class GitHubAlert(AdmonitionFlavor):
         """,
         flags=re.IGNORECASE | re.MULTILINE | re.VERBOSE,
     )
-    quoted = True
+    body_prefix = re.compile(r"^> ?", flags=re.MULTILINE)
     allows_nesting = False

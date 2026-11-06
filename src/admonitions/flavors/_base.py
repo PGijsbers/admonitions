@@ -11,8 +11,8 @@ class AdmonitionFlavor:
     pattern: re.Pattern[str]
     """Matches an alert, capturing its `type`, `body` and optionally `title`."""
 
-    quoted: bool
-    """Whether every body line starts with a `>` to remove."""
+    body_prefix: re.Pattern[str] | None
+    """Matches the prefix to remove from every body line, if any."""
 
     allows_nesting: bool
     """Whether the body may contain other alerts, converted as nested admonitions."""
