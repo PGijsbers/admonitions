@@ -81,30 +81,28 @@ def convert_alerts(markdown: str, *flavors: AdmonitionFlavor) -> str:
 
     def to_admonition(alert: re.Match, flavor: AdmonitionFlavor) -> str:
         """Convert the found alert match into a MkDocs admonition."""
-        alert_type: str = alert.group("type")
-        alert_body: str = alert.group("body").rstrip()
+        # Normalize types that do not exist in MkDocs into supported ones.
+        alert_type: str = alert.group("type").lower()
+        admonition_type = ADMONITION_TYPE_MAP.get(alert_type, alert_type)
 
-        # Use the custom title where supported, defaulting to the alert type
-        alert_title: str = (
-            alert.groupdict().get("title") or ""
-        ).strip() or alert_type.title()
+        # Use the custom title where supported, defaulting to the alert type.
+        alert_title: str = (alert.groupdict().get("title") or "").strip()
+        admonition_title = alert_title or alert_type.title()
+
+        admonition_body: str = alert.group("body").rstrip()
 
         # Remove the body prefix first, so that nested alerts start a line.
         if flavor.body_prefix is not None:
-            alert_body = flavor.body_prefix.sub("", alert_body)
+            admonition_body = flavor.body_prefix.sub("", admonition_body)
 
-        # If the current admonition supports nesting, convert its body first.
+        # If the current admonition supports nesting, convert its body next.
         if flavor.allows_nesting:
-            alert_body = convert_alerts(alert_body, *flavors).strip()
+            admonition_body = convert_alerts(admonition_body, *flavors).strip()
 
-        alert_body = re.sub("^", "    ", alert_body, flags=re.MULTILINE)
+        # Indent the body last, to place it inside the admonition.
+        admonition_body = re.sub("^", "    ", admonition_body, flags=re.MULTILINE)
 
-        # Normalize types that do not exist in MkDocs into supported ones.
-        normalized_type = ADMONITION_TYPE_MAP.get(
-            alert_type.lower(), alert_type.lower()
-        )
-
-        return f'!!! {normalized_type} "{alert_title}"\n{alert_body}\n'
+        return f'!!! {admonition_type} "{admonition_title}"\n{admonition_body}\n'
 
     converted = []
     position = 0
