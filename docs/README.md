@@ -54,32 +54,25 @@ built [`mkdocs`][mm] pages!
 
 ## Limitations
 
-The [`mkdocs`][mm] admonitions are much more powerful. They can feature
-titles. They have more types, and you can add custom ones. You can render inline
-admonitions. They can be collapsable, and be collapsed by default.
-And much more. 
+- The [`mkdocs`][mm] admonitions are much more powerful (titles, more types,
+    inline, collapsible, ...). Since the GitHub syntax has none of that, all
+    admonitions are converted to non-collapsed title-less admonitions.
+- GitHub's `caution` and `important` types are not supported by
+    [`mkdocs`][mm]. They keep their title, but use the `danger` and `warning`
+    symbol and color, respectively.
+- Nested admonitions are not supported. GitHub does not allow them, but
+    GitLab renders an alert inside a multiline (`>>>`) alert as a nested
+    admonition:
 
-But since the GitHub syntax has none of that, this tool can not offer such
-[`mkdocs`][mm] admonitions to be generated. All admonitions will be
-converted to non-collapsed title-less admonitions.
+    ```
+    >>> [!note]
+    > [!tip]
+    > Inner tip.
+    >>>
+    ```
 
-GitHub admonitions feature two types which are not supported by [`mkdocs`][mm]:
-`caution` and `important`. In converting these admonitions, we will preserve their title,
-but use the `danger` and `warning` symbol and color, respectively.
-
-Nested admonitions are not supported. GitHub does not allow them, but GitLab
-renders an alert inside a multiline (`>>>`) alert as a nested admonition:
-
-```
->>> [!note]
-> [!tip]
-> Inner tip.
->>>
-```
-
-This plugin can not convert such admonitions: the inner alert swallows the
-closing `>>>`, so the outer alert is left unconverted. Avoid placing alerts
-inside multiline alerts.
+    The inner alert swallows the closing `>>>`, so the outer alert is left
+    unconverted. Avoid placing alerts inside multiline alerts.
 
 ## Examples
 
