@@ -117,6 +117,50 @@ def test_alert_with_blank_lines():
     )
 
 
+def test_alert_at_end_of_file_without_newline():
+    # GIVEN
+    converter = AdmonitionConverter()
+    # WHEN
+    converted = converter.on_page_markdown(
+        "> [!warning]\n> This is a warning admonition.",
+        page=None,
+        config=None,
+        files=None,
+    )
+    # THEN
+    assert converted == '!!! warning "Warning"\n    This is a warning admonition.\n'
+
+
+def test_alert_with_blank_line_at_end_of_file_without_newline():
+    # GIVEN
+    converter = AdmonitionConverter()
+    # WHEN
+    converted = converter.on_page_markdown(
+        "> [!warning]\n> \n> This is a warning admonition.",
+        page=None,
+        config=None,
+        files=None,
+    )
+    # THEN
+    assert (
+        converted == '!!! warning "Warning"\n    \n    This is a warning admonition.\n'
+    )
+
+
+def test_alert_followed_by_empty_line():
+    # GIVEN
+    converter = AdmonitionConverter()
+    # WHEN
+    converted = converter.on_page_markdown(
+        "> [!warning]\n> This is a warning admonition.\n\n",
+        page=None,
+        config=None,
+        files=None,
+    )
+    # THEN
+    assert converted == '!!! warning "Warning"\n    This is a warning admonition.\n\n'
+
+
 def test_gl_overridden_title():
     # GIVEN
     converter = AdmonitionConverter()

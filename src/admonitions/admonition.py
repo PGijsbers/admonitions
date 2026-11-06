@@ -48,7 +48,7 @@ GH_CODEBLOCK_PATTERN = re.compile(
     flags=re.MULTILINE | re.DOTALL,
 )
 ALERT_BASIC_PATTERN = re.compile(
-    r"^> {,3}\[!(?P<type>note|tip|important|caution|warning)] *(?P<title>.*)\r?\n(?P<body>(?:>.*\r?\n)+)",
+    r"^> {,3}\[!(?P<type>note|tip|important|caution|warning)] *(?P<title>.*)\r?\n(?P<body>(?:>.*(?:\r?\n|\Z))+)",
     flags=re.IGNORECASE | re.MULTILINE,
 )
 """
