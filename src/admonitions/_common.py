@@ -83,16 +83,17 @@ def convert_alerts(markdown: str, *flavors: AdmonitionFlavor) -> str:
         """ Convert the found alert match into a MkDocs admonition. """
         alert_type: str = alert.group("type")
         alert_title: str = (alert.groupdict().get("title") or alert_type.title()).strip()
-        alert_body: str = alert.group("body")
+        alert_body: str = alert.group("body").rstrip()
+
+        # Remove the quote markers first, so that nested alerts start a line.
+        if flavor.quoted:
+            alert_body = re.sub("^> ?", "", alert_body, flags=re.MULTILINE)
 
         # If the current admonition supports nesting, convert its body first.
         if flavor.allows_nesting:
-            alert_body = convert_alerts(alert_body, *flavors)
+            alert_body = convert_alerts(alert_body, *flavors).strip()
 
-        body_prefix = "^> ?" if flavor.quoted else "^"
-        alert_body = re.sub(
-            body_prefix, "    ", alert_body.strip(), flags=re.MULTILINE
-        )
+        alert_body = re.sub("^", "    ", alert_body, flags=re.MULTILINE)
 
         # Normalize types that do not exist in MkDocs into supported ones.
         normalized_type = ADMONITION_TYPE_MAP.get(
@@ -118,7 +119,7 @@ def convert_alerts(markdown: str, *flavors: AdmonitionFlavor) -> str:
             key=lambda candidate: (candidate[0].start(), -candidate[0].end()),
         )
         converted.append(markdown[position : alert.start()])
-        
+
         if in_codeblock(alert):
             converted.append(alert.group())
         else:
