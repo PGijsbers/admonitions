@@ -1,3 +1,5 @@
+from textwrap import dedent
+
 from admonitions.admonition import AdmonitionConverter
 
 
@@ -6,13 +8,19 @@ def test_caution_alert_becomes_danger():
     converter = AdmonitionConverter()
     # WHEN
     converted = converter.on_page_markdown(
-        "> [!caution]\n> This is a caution admonition.\n",
+        dedent("""\
+            > [!caution]
+            > This is a caution admonition.
+        """),
         page=None,
         config=None,
         files=None,
     )
     # THEN
-    assert converted == '!!! danger "Caution"\n    This is a caution admonition.\n'
+    assert converted == dedent("""\
+        !!! danger "Caution"
+            This is a caution admonition.
+    """)
 
 
 def test_important_alert_becomes_warning():
@@ -20,12 +28,16 @@ def test_important_alert_becomes_warning():
     converter = AdmonitionConverter()
     # WHEN
     converted = converter.on_page_markdown(
-        "> [!important]\n> This is an important admonition.\n",
+        dedent("""\
+            > [!important]
+            > This is an important admonition.
+        """),
         page=None,
         config=None,
         files=None,
     )
     # THEN
-    assert (
-        converted == '!!! warning "Important"\n    This is an important admonition.\n'
-    )
+    assert converted == dedent("""\
+        !!! warning "Important"
+            This is an important admonition.
+    """)

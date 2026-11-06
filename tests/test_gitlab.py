@@ -1,3 +1,5 @@
+from textwrap import dedent
+
 from admonitions._common import convert_alerts
 from admonitions.admonition import AdmonitionConverter
 from admonitions.flavors.gitlab import GitLabTitledAlert
@@ -8,16 +10,19 @@ def test_overridden_title():
     converter = AdmonitionConverter()
     # WHEN
     converted = converter.on_page_markdown(
-        "> [!tip] Alert titles can be overridden\n> This is a tip admonition with overridden title.\n",
+        dedent("""\
+            > [!tip] Alert titles can be overridden
+            > This is a tip admonition with overridden title.
+        """),
         page=None,
         config=None,
         files=None,
     )
     # THEN
-    assert (
-        converted
-        == '!!! tip "Alert titles can be overridden"\n    This is a tip admonition with overridden title.\n'
-    )
+    assert converted == dedent("""\
+        !!! tip "Alert titles can be overridden"
+            This is a tip admonition with overridden title.
+    """)
 
 
 def test_multiline_blockquote_alert():
@@ -25,13 +30,21 @@ def test_multiline_blockquote_alert():
     converter = AdmonitionConverter()
     # WHEN
     converted = converter.on_page_markdown(
-        ">>> [!tip]\nThis is a tip admonition.\n>>>\n",
+        dedent("""\
+            >>> [!tip]
+            This is a tip admonition.
+            >>>
+        """),
         page=None,
         config=None,
         files=None,
     )
     # THEN
-    assert converted == '!!! tip "Tip"\n    This is a tip admonition.\n\n'
+    assert converted == dedent("""\
+        !!! tip "Tip"
+            This is a tip admonition.
+
+    """)
 
 
 def test_multiline_alert_with_title_and_codeblock():
@@ -39,21 +52,37 @@ def test_multiline_alert_with_title_and_codeblock():
     converter = AdmonitionConverter()
     # WHEN
     converted = converter.on_page_markdown(
-        ">>> [!WARNING] Inception alert\nHere is the alert syntax:\n```markdown\n> [!tip]\n> This is a tip admonition.\n```\n>>>\n",
+        dedent("""\
+            >>> [!WARNING] Inception alert
+            Here is the alert syntax:
+            ```markdown
+            > [!tip]
+            > This is a tip admonition.
+            ```
+            >>>
+        """),
         page=None,
         config=None,
         files=None,
     )
     # THEN
-    assert (
-        converted
-        == '!!! warning "Inception alert"\n    Here is the alert syntax:\n    ```markdown\n    > [!tip]\n    > This is a tip admonition.\n    ```\n\n'
-    )
+    assert converted == dedent("""\
+        !!! warning "Inception alert"
+            Here is the alert syntax:
+            ```markdown
+            > [!tip]
+            > This is a tip admonition.
+            ```
+
+    """)
 
 
 def test_title_pattern_ignores_gh_alert():
     # GIVEN
-    original = "> [!tip]\n> This is a tip admonition.\n"
+    original = dedent("""\
+        > [!tip]
+        > This is a tip admonition.
+    """)
     # WHEN
     converted = convert_alerts(original, GitLabTitledAlert())
     # THEN
@@ -65,16 +94,33 @@ def test_consecutive_multiline_blockquote_alerts_stay_separate():
     converter = AdmonitionConverter()
     # WHEN
     converted = converter.on_page_markdown(
-        ">>> [!tip]\nFirst block.\n>>>\n\nText between.\n\n>>> [!note]\nSecond block.\n>>>\n",
+        dedent("""\
+            >>> [!tip]
+            First block.
+            >>>
+
+            Text between.
+
+            >>> [!note]
+            Second block.
+            >>>
+        """),
         page=None,
         config=None,
         files=None,
     )
     # THEN
-    assert (
-        converted
-        == '!!! tip "Tip"\n    First block.\n\n\nText between.\n\n!!! note "Note"\n    Second block.\n\n'
-    )
+    assert converted == dedent("""\
+        !!! tip "Tip"
+            First block.
+
+
+        Text between.
+
+        !!! note "Note"
+            Second block.
+
+    """)
 
 
 def test_multiline_blockquote_alert_with_crlf_line_endings_keeps_default_title():
