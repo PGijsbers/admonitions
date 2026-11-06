@@ -80,21 +80,26 @@ def convert_alerts(markdown: str, *flavors: AdmonitionFlavor) -> str:
         )
 
     def to_admonition(alert: re.Match, flavor: AdmonitionFlavor) -> str:
+        """ Convert the found alert match into a MkDocs admonition. """
         alert_type: str = alert.group("type")
-        alert_title: str = (alert.groupdict().get("title") or "").strip()
+        alert_title: str = (alert.groupdict().get("title") or alert_type.title()).strip()
         alert_body: str = alert.group("body")
+
+        # If the current admonition supports nesting, convert its body first.
         if flavor.allows_nesting:
             alert_body = convert_alerts(alert_body, *flavors)
 
-        admonition_type = ADMONITION_TYPE_MAP.get(
-            alert_type.lower(), alert_type.lower()
-        )
-        admonition_title = alert_title or alert_type.title()
         body_prefix = "^> ?" if flavor.quoted else "^"
-        admonition_body = re.sub(
+        alert_body = re.sub(
             body_prefix, "    ", alert_body.strip(), flags=re.MULTILINE
         )
-        return f'!!! {admonition_type} "{admonition_title}"\n{admonition_body}\n'
+
+        # Normalize types that do not exist in MkDocs into supported ones.
+        normalized_type = ADMONITION_TYPE_MAP.get(
+            alert_type.lower(), alert_type.lower()
+        )
+
+        return f'!!! {normalized_type} "{alert_title}"\n{alert_body}\n'
 
     converted = []
     position = 0
@@ -105,6 +110,7 @@ def convert_alerts(markdown: str, *flavors: AdmonitionFlavor) -> str:
         candidates = [(match, flavor) for match, flavor in candidates if match]
         if not candidates:
             break
+
         # the leftmost alert wins, as it would with a single combined pattern,
         # then the longest one, so the order of the flavors doesn't matter
         alert, flavor = min(
@@ -112,10 +118,12 @@ def convert_alerts(markdown: str, *flavors: AdmonitionFlavor) -> str:
             key=lambda candidate: (candidate[0].start(), -candidate[0].end()),
         )
         converted.append(markdown[position : alert.start()])
+        
         if in_codeblock(alert):
             converted.append(alert.group())
         else:
             converted.append(to_admonition(alert, flavor))
         position = alert.end()
+
     converted.append(markdown[position:])
     return "".join(converted)
