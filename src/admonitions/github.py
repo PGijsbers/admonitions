@@ -30,8 +30,10 @@ ALERT_PATTERN = re.compile(
     flags=re.IGNORECASE | re.MULTILINE | re.VERBOSE,
 )
 """
+```
 > [!note]
 > This is a note admonition.
+```
 """
 
 

@@ -6,10 +6,12 @@ import re
 
 CODEBLOCK_PATTERN = re.compile(r"^```.*?^```", flags=re.MULTILINE | re.DOTALL)
 """
+````
 ```markdown
 > [!tip]
 > This alert is not converted.
 ```
+````
 """
 
 # TODO: Make this configurable
