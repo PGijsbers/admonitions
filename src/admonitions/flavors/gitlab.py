@@ -61,8 +61,8 @@ class GitLabMultilineAlert(AdmonitionFlavor):
         r"""
         ^>>>\ {,3}\[!(?P<type>note|tip|important|caution|warning)]  # >>> [!type]
         \ *(?P<title>.*)\r?\n                                       # optional title
-        (?P<body>(?:.*\r?\n)+)                                      # body lines
-        >>>                                                         # closing >>>
+        (?P<body>(?:.*\r?\n)+?)                                     # body lines
+        >>>(?=[ \t]*\r?$)                                           # closing >>> line
         """,
         flags=re.IGNORECASE | re.MULTILINE | re.VERBOSE,
     )

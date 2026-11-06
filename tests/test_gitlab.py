@@ -58,3 +58,20 @@ def test_title_pattern_ignores_gh_alert():
     converted = convert_alerts(original, GitLabTitledAlert())
     # THEN
     assert converted == original
+
+
+def test_consecutive_multiline_blockquote_alerts_stay_separate():
+    # GIVEN
+    converter = AdmonitionConverter()
+    # WHEN
+    converted = converter.on_page_markdown(
+        ">>> [!tip]\nFirst block.\n>>>\n\nText between.\n\n>>> [!note]\nSecond block.\n>>>\n",
+        page=None,
+        config=None,
+        files=None,
+    )
+    # THEN
+    assert (
+        converted
+        == '!!! tip "Tip"\n    First block.\n\n\nText between.\n\n!!! note "Note"\n    Second block.\n\n'
+    )
