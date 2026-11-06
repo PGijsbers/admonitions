@@ -19,7 +19,7 @@ class AdmonitionConverter(BasePlugin):
     def on_page_markdown(
         self, markdown: str, /, *, page: Page, config: MkDocsConfig, files: Files
     ) -> str | None:
-        """Converts all instances of GitHub/GitLab admonition to MM admonitions."""
+        """Converts all GitHub/GitLab alerts to MkDocs Material admonitions."""
         # convert basic syntax, with or without a title (GitLab only), in one pass
         markdown = convert_alerts(
             markdown, github.ALERT_PATTERN, gitlab.TITLED_ALERT_PATTERN

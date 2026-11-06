@@ -21,7 +21,7 @@ ADMONITION_TYPE_MAP = {
 
 
 def convert_alerts(markdown: str, *patterns: re.Pattern, quoted: bool = True) -> str:
-    """Converts all alerts matching any of the `patterns` to MM admonitions.
+    """Converts alerts matching any of the `patterns` to MkDocs Material admonitions.
 
     Each pattern captures the alert's `type` and `body`, and optionally its
     `title`. If `quoted`, every body line starts with a `>` to remove.
