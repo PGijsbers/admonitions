@@ -80,9 +80,11 @@ def convert_alerts(markdown: str, *flavors: AdmonitionFlavor) -> str:
         )
 
     def to_admonition(alert: re.Match, flavor: AdmonitionFlavor) -> str:
-        """ Convert the found alert match into a MkDocs admonition. """
+        """Convert the found alert match into a MkDocs admonition."""
         alert_type: str = alert.group("type")
-        alert_title: str = (alert.groupdict().get("title") or alert_type.title()).strip()
+        alert_title: str = (
+            alert.groupdict().get("title") or ""
+        ).strip() or alert_type.title()
         alert_body: str = alert.group("body").rstrip()
 
         # Remove the quote markers first, so that nested alerts start a line.

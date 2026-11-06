@@ -75,3 +75,17 @@ def test_consecutive_multiline_blockquote_alerts_stay_separate():
         converted
         == '!!! tip "Tip"\n    First block.\n\n\nText between.\n\n!!! note "Note"\n    Second block.\n\n'
     )
+
+
+def test_multiline_blockquote_alert_with_crlf_line_endings_keeps_default_title():
+    # GIVEN
+    converter = AdmonitionConverter()
+    # WHEN
+    converted = converter.on_page_markdown(
+        ">>> [!tip]\r\nThis is a tip admonition.\r\n>>>\r\n",
+        page=None,
+        config=None,
+        files=None,
+    )
+    # THEN
+    assert converted == '!!! tip "Tip"\n    This is a tip admonition.\n\r\n'
