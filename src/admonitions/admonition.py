@@ -17,8 +17,15 @@ from admonitions.flavors.gitlab import GitLabMultilineAlert, GitLabTitledAlert
 
 
 class AdmonitionConverter(BasePlugin):
+
     def on_page_markdown(
-        self, markdown: str, /, *, page: Page, config: MkDocsConfig, files: Files
+        self,
+        markdown: str,
+        /,
+        *,
+        page: Page | None,
+        config: MkDocsConfig | None,
+        files: Files | None,
     ) -> str | None:
         """Converts all GitHub/GitLab alerts to MkDocs Material admonitions."""
         return convert_alerts(
