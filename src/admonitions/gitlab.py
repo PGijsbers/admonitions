@@ -26,7 +26,7 @@ from __future__ import annotations
 
 import re
 
-from ._common import convert_alerts
+from admonitions._common import convert_alerts
 
 TITLED_ALERT_PATTERN = re.compile(
     r"""
