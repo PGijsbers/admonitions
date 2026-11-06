@@ -26,9 +26,40 @@ def convert_alerts(markdown: str, *patterns: re.Pattern, quoted: bool = True) ->
     Each pattern captures the alert's `type` and `body`, and optionally its
     `title`. If `quoted`, every body line starts with a `>` to remove.
 
-    The patterns are applied in a single left-to-right pass, as if they were one
-    pattern, so the body of an alert is never converted by another pattern.
     Alerts within code blocks are left untouched.
+
+    The patterns are applied in a single left-to-right pass, as if they were
+    one pattern. At each step, the leftmost match of any pattern is converted
+    and the search resumes after its end. So the body of an alert is never
+    converted by another pattern, even when it contains a line that looks like
+    the start of an alert. This matches GitHub and GitLab, which support neither
+    nested nor consecutive alerts, and render a later alert marker in an alert's
+    body as plain text.
+
+    Example, with a titled alert whose body contains a GitHub alert marker:
+    ```
+    > [!tip] Overridden title
+    > [!note]
+    > This is the body.
+    ```
+
+    In a single pass, the titled alert matches first and takes the whole block:
+    ```
+    !!! tip "Overridden title"
+        [!note]
+        This is the body.
+    ```
+
+    Applying the GitHub pattern first, then the titled one, would instead convert
+    the inner `> [!note]` alert, leaving the outer one with no body to match:
+    ```
+    > [!tip] Overridden title
+    !!! note "Note"
+        This is the body.
+    ```
+
+    Swapping the order breaks the reverse case, a GitHub alert whose body
+    contains a titled alert marker.
     """
     codeblocks = list(CODEBLOCK_PATTERN.finditer(markdown))
     body_prefix = re.compile("^> ?" if quoted else "^", re.MULTILINE)
