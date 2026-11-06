@@ -37,6 +37,7 @@ TITLED_ALERT_PATTERN = re.compile(
     flags=re.IGNORECASE | re.MULTILINE | re.VERBOSE,
 )
 """
+Example:
 ```
 > [!caution] Overridden title
 > This is a caution admonition with overridden title.
@@ -53,6 +54,7 @@ MULTILINE_ALERT_PATTERN = re.compile(
     flags=re.IGNORECASE | re.MULTILINE | re.VERBOSE,
 )
 """
+Example:
 ```
 >>> [!tip]
 This is a tip admonition.
