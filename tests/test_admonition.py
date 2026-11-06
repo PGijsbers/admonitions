@@ -1,3 +1,4 @@
+from admonitions import github, gitlab
 from admonitions.admonition import AdmonitionConverter
 # import src.admonitions.admonition
 
@@ -206,4 +207,38 @@ def test_gl_complex():
     assert (
         converted
         == '!!! warning "Inception alert"\n    Here is the alert syntax:\n    ```markdown\n    > [!tip]\n    > This is a tip admonition.\n    ```\n\n'
+    )
+
+
+def test_gh_converter_ignores_overridden_title():
+    # GIVEN
+    original = "> [!tip] Alert titles can be overridden\n> This is a tip admonition.\n"
+    # WHEN
+    converted = github.convert(original)
+    # THEN
+    assert converted == original
+
+
+def test_gl_converter_ignores_gh_alert():
+    # GIVEN
+    original = "> [!tip]\n> This is a tip admonition.\n"
+    # WHEN
+    converted = gitlab.convert(original)
+    # THEN
+    assert converted == original
+
+
+def test_gh_alert_in_gl_alert_body_isnt_converted():
+    # GIVEN
+    converter = AdmonitionConverter()
+    # WHEN
+    converted = converter.on_page_markdown(
+        "> [!tip] Overridden title\n> [!note]\n> This is the body.\n",
+        page=None,
+        config=None,
+        files=None,
+    )
+    # THEN
+    assert (
+        converted == '!!! tip "Overridden title"\n    [!note]\n    This is the body.\n'
     )

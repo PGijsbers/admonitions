@@ -13,31 +13,29 @@ Supported GitHub alert types are:
 - important
 - warning
 - caution
-
-GitLab supports this syntax too, extended with an optional overridden title
-(see `admonitions.gitlab`), which is also handled here.
 """
 
 from __future__ import annotations
 
 import re
 
-from ._common import convert_alerts
+from ._common import AlertRule, convert_alerts
 
-ALERT_BASIC_PATTERN = re.compile(
-    r"^> {,3}\[!(?P<type>note|tip|important|caution|warning)] *(?P<title>.*)\r?\n(?P<body>(?:>.*(?:\r?\n|\Z))+)",
+ALERT_PATTERN = re.compile(
+    r"^> {,3}\[!(?P<type>note|tip|important|caution|warning)][^\S\n]*\r?\n(?P<body>(?:>.*(?:\r?\n|\Z))+)",
     flags=re.IGNORECASE | re.MULTILINE,
 )
 """
-Basic alert syntax pattern with capturing groups:
-- `type`: Alert type (GitHub & GitLab)
-- `title`: Overridden title (GitLab only)
-- `body`: Alert body (GitHub & GitLab)
+Alert syntax pattern with capturing groups:
+- `type`: Alert type
+- `body`: Alert body
 """
 
-ALERT_BASIC_BODY_PREFIX = re.compile("^> ?", re.MULTILINE)
+ALERT_BODY_PREFIX = re.compile("^> ?", re.MULTILINE)
+
+ALERT_RULE: AlertRule = (ALERT_PATTERN, ALERT_BODY_PREFIX)
 
 
 def convert(markdown: str) -> str:
-    """Converts all basic syntax alerts to MM admonitions."""
-    return convert_alerts(markdown, ALERT_BASIC_PATTERN, ALERT_BASIC_BODY_PREFIX)
+    """Converts all GitHub alerts to MM admonitions."""
+    return convert_alerts(markdown, ALERT_RULE)
