@@ -22,5 +22,8 @@ class AdmonitionConverter(BasePlugin):
     ) -> str | None:
         """Converts all GitHub/GitLab alerts to MkDocs Material admonitions."""
         return convert_alerts(
-            markdown, GitHubAlert(), GitLabTitledAlert(), GitLabMultilineAlert()
+            markdown,
+            GitHubAlert(),
+            GitLabTitledAlert(),
+            GitLabMultilineAlert(),
         )
