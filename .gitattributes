@@ -1,3 +1,2 @@
-# Detect text files automatically and always use LF line endings,
-# also on Windows checkouts
-* text=auto eol=lf
+# Detect text files automatically
+* text=auto
