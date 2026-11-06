@@ -1,18 +1,16 @@
-"""Converts GitLab 'alerts' to MkDocs Material admonitions.
+"""GitLab 'alerts' syntax.
 
-## GitLab alerts syntax
-
-GitLab embraces GitHub syntax (see `admonitions.github`) with some minor
-additions, which are converted by this module.
+GitLab embraces GitHub syntax (see `admonitions.flavours.github`) with some
+minor additions.
 
 See: https://docs.gitlab.com/user/markdown/#alerts
 
-### Override the alert block's title
+## Override the alert block's title
 
 > [!caution] Overridden title
 > This is a caution admonition with overridden title.
 
-### Multiline blockquotes
+## Multiline blockquotes
 
 >>> [!tip]
 GitLab alerts supports:
@@ -25,8 +23,6 @@ GitLab alerts supports:
 from __future__ import annotations
 
 import re
-
-from admonitions._common import convert_alerts
 
 TITLED_ALERT_PATTERN = re.compile(
     r"""
@@ -61,9 +57,3 @@ This is a tip admonition.
 >>>
 ```
 """
-
-
-def convert(markdown: str) -> str:
-    """Converts all GitLab-only alerts to MM admonitions."""
-    markdown = convert_alerts(markdown, TITLED_ALERT_PATTERN)
-    return convert_alerts(markdown, MULTILINE_ALERT_PATTERN, quoted=False)

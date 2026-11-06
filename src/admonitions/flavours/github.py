@@ -1,6 +1,4 @@
-"""Converts GitHub 'alerts' to MkDocs Material admonitions.
-
-## GitHub alerts syntax
+"""GitHub 'alerts' syntax.
 
 See: https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts
 
@@ -19,8 +17,6 @@ from __future__ import annotations
 
 import re
 
-from admonitions._common import convert_alerts
-
 ALERT_PATTERN = re.compile(
     r"""
     ^>\ {,3}\[!(?P<type>note|tip|important|caution|warning)]  # > [!type]
@@ -36,8 +32,3 @@ Example:
 > This is a note admonition.
 ```
 """
-
-
-def convert(markdown: str) -> str:
-    """Converts all GitHub alerts to MM admonitions."""
-    return convert_alerts(markdown, ALERT_PATTERN)

@@ -1,5 +1,6 @@
-from admonitions import github, gitlab
+from admonitions._common import convert_alerts
 from admonitions.admonition import AdmonitionConverter
+from admonitions.flavours import github, gitlab
 # import src.admonitions.admonition
 
 
@@ -210,20 +211,20 @@ def test_gl_complex():
     )
 
 
-def test_gh_converter_ignores_overridden_title():
+def test_gh_pattern_ignores_overridden_title():
     # GIVEN
     original = "> [!tip] Alert titles can be overridden\n> This is a tip admonition.\n"
     # WHEN
-    converted = github.convert(original)
+    converted = convert_alerts(original, github.ALERT_PATTERN)
     # THEN
     assert converted == original
 
 
-def test_gl_converter_ignores_gh_alert():
+def test_gl_title_pattern_ignores_gh_alert():
     # GIVEN
     original = "> [!tip]\n> This is a tip admonition.\n"
     # WHEN
-    converted = gitlab.convert(original)
+    converted = convert_alerts(original, gitlab.TITLED_ALERT_PATTERN)
     # THEN
     assert converted == original
 
