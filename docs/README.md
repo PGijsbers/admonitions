@@ -67,6 +67,20 @@ GitHub admonitions feature two types which are not supported by [`mkdocs`][mm]:
 `caution` and `important`. In converting these admonitions, we will preserve their title,
 but use the `danger` and `warning` symbol and color, respectively.
 
+Nested admonitions are not supported. GitHub does not allow them, but GitLab
+renders an alert inside a multiline (`>>>`) alert as a nested admonition:
+
+```
+>>> [!note]
+> [!tip]
+> Inner tip.
+>>>
+```
+
+This plugin can not convert such admonitions: the inner alert swallows the
+closing `>>>`, so the outer alert is left unconverted. Avoid placing alerts
+inside multiline alerts.
+
 ## Examples
 
 Here is a gallery with various admonitions.
